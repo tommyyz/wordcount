@@ -1,5 +1,6 @@
 # wordcount
 word count in various languages: js, go, python...
+不同开发语言版本的字数统计小工具
 
 ### Quick Start
 ```
