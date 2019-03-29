@@ -1,5 +1,5 @@
 ### wordcount
-word count in: js, golang, python... Idealy support all modern languages
+word count in: javascript, golang, python... Idealy support all modern languages
 
 不同开发语言版本的字数统计小工具，理论上支持中文，英文，日文等流行语言
 
