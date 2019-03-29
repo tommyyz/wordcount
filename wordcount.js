@@ -306,6 +306,7 @@ function TextWordGetter(UnicodeData, StringMapper, WordBoundary) {
   var doGetWords = function (string, options) {
     var i = 0;
     var map = StringMapper.classify(string);
+    // console.log(map);
     var len = map.length;
     var word = [];
     var words = [];
@@ -328,9 +329,11 @@ function TextWordGetter(UnicodeData, StringMapper, WordBoundary) {
     // whether it precedes a word boundary, building an array of distinct
     // words as we go.
     for (; i < len; ++i) {
+      // console.log(i)
       chr = string.charAt(i);
 
       // Append this character to the current word.
+      // console.log(chr, word)
       word.push(chr);
 
       // If there's a word boundary between the current character and the
@@ -347,6 +350,7 @@ function TextWordGetter(UnicodeData, StringMapper, WordBoundary) {
             words.push(obj.word);
             i = obj.index;
           } else {
+            // console.log(word, words)
             words.push(word);
           }
         }
@@ -373,9 +377,9 @@ function main() {
   var sm = TextStringMapper(ud, ar)
   var wb = TextWordBoundary(ud)
   var wg = TextWordGetter(ud, sm, wb)
-  var words = wg.getWords("This is TomZhu. 这是汤姆猪")
-  console.log(words) // [ 'This', 'is', 'TomZhu', '这', '是', '汤', '姆', '猪' ]
-  console.log(words.length) // 8
+  var words = wg.getWords("This is Tom Zhu... 这是汤姆猪!!!")
+  console.log(words) // [ 'This', 'is', 'Tom', 'Zhu', '这', '是', '汤', '姆', '猪' ]
+  console.log(words.length) // 9
 }
 
 main()
