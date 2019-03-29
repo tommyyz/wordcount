@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"regexp"
-	"strings"
 	"strconv"
 )
 
@@ -65,10 +64,10 @@ func isProtocol (word string) bool {
 }
 
 func findWordEnd (str string, index int) int {
+	chars := []rune(str)
 	i := 0
-	for i = index; i < len(str); i++ {
-		var chr = string([]rune(str)[i])
-		if matched, _ := regexp.MatchString(WHITESPACE, chr); matched {
+	for i = index; i < len(chars); i++ {
+		if matched, _ := regexp.MatchString(WHITESPACE, string(chars[i])); matched {
 			break
 		}
 	}
@@ -84,11 +83,11 @@ func extractUrl (word string, wholeStr string, index int) (string, int) {
 	return word, index
 }
 
-func getType(char string) int {
+func getType(char rune) int {
 	var charType = CI_OTHER
 	for j := 0; j < len(SETS); j++ {
 		set, _ := strconv.Unquote(`"`+SETS[j]+`"`)
-		if matched, _ := regexp.MatchString(set, char); matched {
+		if matched, _ := regexp.MatchString(set, string(char)); matched {
 			charType = j
 			break
 		}
@@ -96,9 +95,9 @@ func getType(char string) int {
 	return charType
 }
 
-func classifyTypes(str string) []int {
+func classifyTypes(chars []rune) []int {
 	types := make([]int, 0)
-	for _, char := range strings.Split(str, EMPTY_STRING) {
+	for _, char := range chars {
 		types = append(types, getType(char))
 	}
 	return types
@@ -193,7 +192,7 @@ func isWordBoundary(strTypeList []int, index int) bool {
 	}
 
 	if curType == CI_AT {
-	return false
+		return false
 	}
 
 	// Break after any character not covered by the rules above.
@@ -201,48 +200,46 @@ func isWordBoundary(strTypeList []int, index int) bool {
 }
 
 func GetWords(str string) []string {
-
-	var word = make([]string, 0)
+	var chars = []rune(str)
+	var word = make([]rune, 0)
 	var words = make([]string, 0)
-	var strTypeList = classifyTypes(str)
-	// fmt.Println("str:", strings.Split(str, EMPTY_STRING))
-	// fmt.Println("strTypeList:", strTypeList)
+	var strTypeList = classifyTypes(chars)
 
 	// Loop through each character in the classification map and determine
 	// whether it precedes a word boundary, building an array of distinct
 	// words as we go.
 	for i := 0; i < len(strTypeList); i++ {
-		chr := string([]rune(str)[i])
+		char := chars[i]
 
 		// Append this character to the current word.
-		word = append(word, chr)
+		word = append(word, char)
 
 		// If there's a word boundary between the current character and the
 		// next character, append the current word to the words array and
 		// start building a new word.
 		if isWordBoundary(strTypeList, i) {
-			wordStr := strings.Join(word, EMPTY_STRING)
+			wordStr := string(word)
 
 			if matched, _ := regexp.MatchString(WHITESPACE, wordStr); matched {
-				word = make([]string, 0)
+				word = make([]rune, 0)
 				continue
 			}
 
 			set, _ := strconv.Unquote(`"`+REGX_punctuation+`"`)
 			if matched, _ := regexp.MatchString("^"+set+"$", wordStr); matched {
-				word = make([]string, 0)
+				word = make([]rune, 0)
 				continue
 			}
 
 			if isProtocol(wordStr) {
-				word, index := extractUrl(wordStr, str, i)
-				words = append(words, word)
+				extractedWordStr, index := extractUrl(wordStr, str, i)
+				words = append(words, extractedWordStr)
 				i = index
 			} else {
-				words = append(words, wordStr)
+				words = append(words, string(word))
 			}
 
-			word = make([]string, 0)
+			word = make([]rune, 0)
 		}
 	}
 	return words
