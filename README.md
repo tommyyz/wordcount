@@ -1,6 +1,7 @@
-# wordcount
-word count in various languages: js, go, python...
-不同开发语言版本的字数统计小工具
+### wordcount
+word count in: js, go, python... Idealy support all modern languages
+
+不同开发语言版本的字数统计小工具，理论上支持中文，英文，日文等流行语言
 
 ### Quick Start
 ```
@@ -16,4 +17,5 @@ go run wordcount.go
 
 ### Thank To
 JS code is taken from [`Tinymce v4`](https://github.com/tinymce/tinymce/tree/4.5.x/js/tinymce/plugins/wordcount/src/main/js/tinymce/wordcount)
+
 Golang code is simply a translation from JS code
