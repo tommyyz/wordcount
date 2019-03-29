@@ -15,5 +15,5 @@ go run wordcount.go
 ```
 
 ### Thank To
-JS code is taken from `Tinymce v4.6.6`
+JS code is taken from [`Tinymce v4`](https://github.com/tinymce/tinymce/tree/4.5.x/js/tinymce/plugins/wordcount/src/main/js/tinymce/wordcount)
 Golang code is simply a translation from JS code
